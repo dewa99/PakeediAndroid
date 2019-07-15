@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/searchcontainerz"
+    >
+
+    <LinearLayout
+        android:layout_marginTop="120dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/layout_search"
+            android:layout_margin="20dp"
+            android:hint="search"
+            android:paddingLeft="30dp"
+            android:drawableRight="@android:drawable/ic_menu_search"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            />
+
+        <Button
+            android:id="@+id/submitform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</RelativeLayout>
