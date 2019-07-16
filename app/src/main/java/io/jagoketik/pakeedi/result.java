@@ -50,6 +50,7 @@ public class result extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
         Bundle bundle = getArguments();
         if(bundle !=null){
             json = bundle.getString("json");
@@ -62,17 +63,20 @@ public class result extends Fragment {
             }
 //            String result = jsonData.getAsJsonArray("album_list").get(0).getAsJsonObject().get("artist_name").toString();
         }
+
         if(jsonData.getAsJsonArray("singer_list") != null){
-        for (int i = 0;i < jsonData.getAsJsonArray("singer_list").size();i++){
+            for (int i = 0;i < jsonData.getAsJsonArray("singer_list").size();i++){
                 String result = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("name").toString();
-            Drawable d = Drawable.create
-            profpic.setImageResource();
-           resultList.add(
+                String resultFix = result.replace("\"","");
+                String urlImage = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("pic_url_tpl").toString();
+
+                resultList.add(
                    new results(
-                           result
+                           resultFix,
+                           urlImage
                    )
            );
-           }
+            }
         }
         else {
             Toast.makeText(getContext(), "Tidak Ada Data", Toast.LENGTH_SHORT).show();
@@ -80,6 +84,6 @@ public class result extends Fragment {
 
         adapter = new resultAdapter(getContext(),resultList);
         recyclerView.setAdapter(adapter);
-            return v;
+        return v;
     }
 }
