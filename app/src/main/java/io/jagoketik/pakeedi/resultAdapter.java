@@ -4,16 +4,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.module.AppGlideModule;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,10 +44,24 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull resultViewHolder resultViewHolder, int position) {
-        results Result = result.get(position);
+    public void onBindViewHolder(@NonNull final resultViewHolder resultViewHolder, int position) {
+        final results Result = result.get(position);
         resultViewHolder.name.setText(Result.getTitle());
-        ;
+        resultViewHolder.name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                String data = Result.getId().replace("\"","");
+                bundle.putString("artist","http://ayahku.herokuapp.com/artist/list/"+data);
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                Fragment frag = new hasil_artist();
+                frag.setArguments(bundle);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.containermain, frag).commit();
+
+
+            }
+        });
+
         try {
             InputStream in = (InputStream) new URL(Result.getUrlimage()).getContent();
             Bitmap bitmap = BitmapFactory.decodeStream(in);
