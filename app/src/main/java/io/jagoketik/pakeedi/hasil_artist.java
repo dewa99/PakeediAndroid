@@ -48,7 +48,7 @@ public class hasil_artist extends Fragment {
         }
         if(jsonData!=null){
             for (int i=0;i<jsonData.getAsJsonObject("tracks").get("list_count").getAsInt();i++){
-                String name = jsonData.getAsJsonObject("tracks").getAsJsonArray("items").get(i).getAsJsonObject().get("name").toString();
+                String name = jsonData.getAsJsonObject("tracks").getAsJsonArray("items").get(i).getAsJsonObject().get("name").getAsString();
                 String id = jsonData.getAsJsonObject("tracks").getAsJsonArray("items").get(i).getAsJsonObject().get("id").toString();
 
                 list.add(

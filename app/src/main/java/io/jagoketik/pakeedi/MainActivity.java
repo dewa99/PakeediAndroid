@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
 
         player = new MediaPlayer();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        if(!player.isPlaying()){
+            player.reset();
+        }
 
     }
 
