@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import io.jagoketik.pakeedi.MainActivity;
 
 import java.util.List;
 import io.jagoketik.model.results_artist;
@@ -30,13 +31,17 @@ public class result_artistAdapter extends RecyclerView.Adapter<result_artistAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull result_artistViewHolder result_artistViewHolder, int i) {
-        results_artist artis = artist.get(i);
+    public void onBindViewHolder(@NonNull final result_artistViewHolder result_artistViewHolder, int i) {
+        final results_artist artis = artist.get(i);
         result_artistViewHolder.title.setText(artis.getName());
-        result_artistViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        result_artistViewHolder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String json = artis.getId().replace("\"","");
+                String data = "http://ayahku.herokuapp.com/music/songinfo/" + json;
+                if(mcx instanceof MainActivity){
+                    ((MainActivity)mcx).play(data);
+                }
             }
         });
     }
@@ -53,4 +58,5 @@ public class result_artistAdapter extends RecyclerView.Adapter<result_artistAdap
             title = itemView.findViewById(R.id.judullagu);
         }
     }
+
 }
