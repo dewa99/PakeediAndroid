@@ -38,7 +38,7 @@ public class result_artistAdapter extends RecyclerView.Adapter<result_artistAdap
             @Override
             public void onClick(View v) {
                 String json = artis.getId().replace("\"","");
-                String data = "http://ayahku.herokuapp.com/music/songinfo/" + json;
+                String data = "http://165.22.97.31/music/songinfo/" + json;
                 if(mcx instanceof MainActivity){
                     ((MainActivity)mcx).play(data);
                 }

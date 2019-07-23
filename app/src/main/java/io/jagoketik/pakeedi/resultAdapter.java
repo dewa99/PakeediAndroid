@@ -52,7 +52,7 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 String data = Result.getId().replace("\"","");
-                bundle.putString("artist","http://ayahku.herokuapp.com/artist/list/"+data);
+                bundle.putString("artist","http://165.22.97.31/artist/list/"+data);
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 Fragment frag = new hasil_artist();
                 frag.setArguments(bundle);
