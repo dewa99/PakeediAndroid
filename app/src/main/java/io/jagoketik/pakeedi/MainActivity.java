@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     String jsonData;
     String url,url1;
     String artist,title;
+    Boolean exist = true;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -112,9 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         player = new MediaPlayer();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        if(!player.isPlaying()){
-            player.reset();
-        }
+
 
     }
 
@@ -129,14 +128,24 @@ public class MainActivity extends AppCompatActivity {
             JsonObject reader = new JsonParser().parse(jsonData).getAsJsonObject();
             artist = reader.get("msinger").getAsString();
             title = reader.get("msong").getAsString();
-            if(reader.get("r192Url").getAsString()==null){
-                url1 = reader.get("r320Url").getAsString();
+
+            if(reader.has("r320Url") || reader.has("r192Url") || reader.has("mp3Url"))
+            {
+                exist = true;
+
+                if(reader.get("r192Url").getAsString()==null){
+                    url1 = reader.get("r320Url").getAsString();
+                }
+                else if(reader.get("r192Url").getAsString()!=null){
+                    url1 = reader.get("r192Url").getAsString();
+                }
+                else if(reader.get("r320Url").getAsString()==null){
+                    url1 = reader.get("mp3Url").getAsString();
+                }
             }
-            else if(reader.get("r192Url").getAsString()!=null){
-                url1 = reader.get("r192Url").getAsString();
-            }
-            else if(reader.get("r320Url").getAsString()==null){
-                url1 = reader.get("mp3Url").getAsString();
+            else {
+                exist = false;
+                Toast.makeText(this, "Tidak Ada Data, Maaf", Toast.LENGTH_SHORT).show();
             }
 
         } catch (ExecutionException e) {
@@ -147,13 +156,18 @@ public class MainActivity extends AppCompatActivity {
     }
     void Controller(){
         parseJson();
-        if(!player.isPlaying()){
-            audioPlay();
+        if(exist){
+            if(!player.isPlaying()){
+                audioPlay();
+            }
+            else {
+                player.stop();
+                player.reset();
+                audioPlay();
+            }
         }
         else {
-            player.stop();
-            player.reset();
-            audioPlay();
+            Toast.makeText(this, "Tidak Ada Data, Maaf", Toast.LENGTH_SHORT).show();
         }
 
     }
