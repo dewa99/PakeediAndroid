@@ -16,7 +16,7 @@ public class results_artist {
     }
 
     public String getUrl() {
-        return url;
+        return url.replace("id","100");
     }
 
     public String getId() {

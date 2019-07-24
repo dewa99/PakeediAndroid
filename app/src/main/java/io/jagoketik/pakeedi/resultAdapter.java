@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,30 +49,26 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
     public void onBindViewHolder(@NonNull final resultViewHolder resultViewHolder, int position) {
         final results Result = result.get(position);
         resultViewHolder.name.setText(Result.getTitle());
+        Picasso.get()
+                .load(Result.getUrlimage().replace("\"",""))
+                .placeholder(R.drawable.music_placeholder)
+                .error(R.drawable.music_placeholder)
+                .into((ImageView) resultViewHolder.a.findViewById(R.id.imageResult));
         resultViewHolder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 String data = Result.getId().replace("\"","");
-                bundle.putString("artist","http://ayahku.herokuapp.com/artist/list/"+data);
+                bundle.putString("url","http://165.22.97.31/artist/album/"+data);
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                Fragment frag = new hasil_artist();
+                Fragment frag = new hasil_album();
                 frag.setArguments(bundle);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.containermain, frag).commit();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.result2, frag).commit();
+                Toast.makeText(activity, ""+Result.getUrlimage(), Toast.LENGTH_SHORT).show();
 
 
             }
         });
-
-        try {
-            InputStream in = (InputStream) new URL(Result.getUrlimage()).getContent();
-            Bitmap bitmap = BitmapFactory.decodeStream(in);
-            resultViewHolder.imageprof.setImageBitmap(bitmap);
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
     }
 
@@ -82,10 +80,12 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
     class resultViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         ImageView imageprof;
+        View a;
         public resultViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.judullagu);
+            name = itemView.findViewById(R.id.nameResult);
             imageprof = (ImageView) itemView.findViewById(R.id.imageResult);
+            a = itemView;
 
         }
     }

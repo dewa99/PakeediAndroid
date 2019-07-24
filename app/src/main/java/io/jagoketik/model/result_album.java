@@ -1,25 +1,25 @@
 package io.jagoketik.model;
 
-public class results {
+public class result_album {
     private String title;
-    private String urlimage;
     private String id;
+    private String imgSrc;
 
-    public results(String title, String urlimage, String id) {
+    public result_album(String title, String id, String imgSrc) {
         this.title = title;
-        this.urlimage = urlimage;
         this.id = id;
+        this.imgSrc = imgSrc;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getUrlimage() {
-        return urlimage.replace("id","100");
-    }
-
     public String getId() {
         return id;
+    }
+
+    public String getImgSrc() {
+        return imgSrc;
     }
 }

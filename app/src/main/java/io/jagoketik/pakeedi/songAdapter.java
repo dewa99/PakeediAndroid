@@ -47,7 +47,7 @@ public class songAdapter extends RecyclerView.Adapter<songAdapter.songViewHolder
         TextView title;
         public songViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.judullagu);
+            title = itemView.findViewById(R.id.artistPanel);
         }
     }
 }

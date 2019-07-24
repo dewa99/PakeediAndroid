@@ -40,7 +40,7 @@ public class search extends Fragment {
             public void onClick(View v) {
                     value = form.getText().toString();
                     String key = value.replaceAll("\\s","");
-                    json = "http://ayahku.herokuapp.com/music/v2/search/" + key;
+                    json = "http://165.22.97.31/music/v2/search/" + key;
 
                     result resultFrag = new result();
                     Bundle bundle = new Bundle();

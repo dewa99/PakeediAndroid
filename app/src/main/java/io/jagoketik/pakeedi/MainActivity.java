@@ -1,6 +1,9 @@
 package io.jagoketik.pakeedi;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer player;
     String jsonData;
     String url,url1;
-    String artist,title;
-    Boolean exist = true;
+    String artist,title,img_url;
+    ImageView image_list;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -86,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         next = findViewById(R.id.next);
         artistPan = findViewById(R.id.artistPanel);
         songTitle = findViewById(R.id.songTitle);
+        image_list = findViewById(R.id.img_list);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
 
         player = new MediaPlayer();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
+        if(!player.isPlaying()){
+            player.reset();
+        }
 
     }
 
@@ -128,24 +137,19 @@ public class MainActivity extends AppCompatActivity {
             JsonObject reader = new JsonParser().parse(jsonData).getAsJsonObject();
             artist = reader.get("msinger").getAsString();
             title = reader.get("msong").getAsString();
-
-            if(reader.has("r320Url") || reader.has("r192Url") || reader.has("mp3Url"))
-            {
-                exist = true;
-
-                if(reader.get("r192Url").getAsString()==null){
-                    url1 = reader.get("r320Url").getAsString();
-                }
-                else if(reader.get("r192Url").getAsString()!=null){
-                    url1 = reader.get("r192Url").getAsString();
-                }
-                else if(reader.get("r320Url").getAsString()==null){
-                    url1 = reader.get("mp3Url").getAsString();
-                }
+            if (reader.get("imgSrc").getAsString() != null){
+                img_url = reader.get("imgSrc").getAsString();
+            }else{
+                img_url = reader.get("album_url").getAsString();
             }
-            else {
-                exist = false;
-                Toast.makeText(this, "Tidak Ada Data, Maaf", Toast.LENGTH_SHORT).show();
+            if(reader.get("r320Url").getAsString()!=null){
+                url1 = reader.get("r320Url").getAsString();
+            }
+            else if(reader.get("r192Url").getAsString()!=null){
+                url1 = reader.get("r192Url").getAsString();
+            }
+            else if(reader.get("mp3Url").getAsString()!=null){
+                url1 = reader.get("mp3Url").getAsString();
             }
 
         } catch (ExecutionException e) {
@@ -156,18 +160,13 @@ public class MainActivity extends AppCompatActivity {
     }
     void Controller(){
         parseJson();
-        if(exist){
-            if(!player.isPlaying()){
-                audioPlay();
-            }
-            else {
-                player.stop();
-                player.reset();
-                audioPlay();
-            }
+        if(!player.isPlaying()){
+            audioPlay();
         }
         else {
-            Toast.makeText(this, "Tidak Ada Data, Maaf", Toast.LENGTH_SHORT).show();
+            player.stop();
+            player.reset();
+            audioPlay();
         }
 
     }
@@ -177,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
             player.prepare();
             artistPan.setText(artist);
             songTitle.setText(title);
+            image_list.setImageBitmap(loadimage(img_url));
             player.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,6 +184,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public Bitmap loadimage(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Bitmap d = BitmapFactory.decodeStream(is);
+            return Bitmap.createScaledBitmap(d,640, 640 , false);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     void pause(){
 

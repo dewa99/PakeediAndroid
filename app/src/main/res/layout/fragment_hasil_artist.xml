@@ -10,12 +10,14 @@
         android:id="@+id/results"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".artist"
         tools:listitem="@layout/item_artist"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="80dp"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager">
 
 
 

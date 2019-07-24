@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.jagoketik.model.results;
+import io.jagoketik.model.result_album;
 
 
 public class result extends Fragment {
@@ -26,6 +27,7 @@ public class result extends Fragment {
     RecyclerView recyclerView;
     resultAdapter adapter;
     List<results> resultList;
+    List<result_album> resultAlbum;
     JsonObject jsonData;
     String json;
     ImageView profpic;
@@ -40,11 +42,11 @@ public class result extends Fragment {
         EditText value = v.findViewById(R.id.search);
         profpic = (ImageView) v.findViewById(R.id.imageResult);
         resultList = new ArrayList<>();
+        resultAlbum = new ArrayList<>();
 
-        recyclerView = v.findViewById(R.id.results);
+        recyclerView = v.findViewById(R.id.resultsArtist);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
         Bundle bundle = getArguments();
         if(bundle !=null){
@@ -63,7 +65,7 @@ public class result extends Fragment {
             for (int i = 0;i < jsonData.getAsJsonArray("singer_list").size();i++){
                 String result = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("name").toString();
                 String resultFix = result.replace("\"","");
-                String urlImage = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("pic_url_tpl").toString();
+                String urlImage = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("pic_url_tpl").getAsString();
                 String id = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("doc_id").toString();
 
                 resultList.add(
@@ -75,7 +77,7 @@ public class result extends Fragment {
             }
         }
         else {
-            Toast.makeText(getContext(), "Tidak Ada Data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Tidak Ada Data Artist", Toast.LENGTH_SHORT).show();
         }
 
         adapter = new resultAdapter(getContext(),resultList);
