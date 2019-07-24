@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     String url,url1;
     String artist,title,img_url;
     ImageView image_list;
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         next = findViewById(R.id.next);
         artistPan = findViewById(R.id.artistPanel);
         songTitle = findViewById(R.id.songTitle);
-        image_list = findViewById(R.id.img_list);
+
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,21 +177,10 @@ public class MainActivity extends AppCompatActivity {
             player.prepare();
             artistPan.setText(artist);
             songTitle.setText(title);
-            image_list.setImageBitmap(loadimage(img_url));
+            Picasso.get().load(img_url).into((ImageView) findViewById(R.id.img_list));
             player.start();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    public Bitmap loadimage(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Bitmap d = BitmapFactory.decodeStream(is);
-            return Bitmap.createScaledBitmap(d,640, 640 , false);
-        } catch (Exception e) {
-            return null;
         }
     }
 

@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +49,7 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
     public void onBindViewHolder(@NonNull final resultViewHolder resultViewHolder, int position) {
         final results Result = result.get(position);
         resultViewHolder.name.setText(Result.getTitle());
+        Picasso.get().load(Result.getUrlimage().replace("\"" , "")).into((ImageView) resultViewHolder.a.findViewById(R.id.imageResult));
         resultViewHolder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,20 +60,8 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
                 Fragment frag = new hasil_artist();
                 frag.setArguments(bundle);
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.containermain, frag).commit();
-
-
             }
         });
-
-        try {
-            InputStream in = (InputStream) new URL(Result.getUrlimage()).getContent();
-            Bitmap bitmap = BitmapFactory.decodeStream(in);
-            resultViewHolder.imageprof.setImageBitmap(bitmap);
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
     }
 
@@ -81,11 +72,11 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
 
     class resultViewHolder extends RecyclerView.ViewHolder {
         TextView name;
-        ImageView imageprof;
+        View a;
         public resultViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.judullagu);
-            imageprof = (ImageView) itemView.findViewById(R.id.imageResult);
+            a = itemView;
 
         }
     }

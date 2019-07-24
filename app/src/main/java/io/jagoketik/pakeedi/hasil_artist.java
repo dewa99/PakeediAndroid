@@ -50,12 +50,15 @@ public class hasil_artist extends Fragment {
             for (int i=0;i<jsonData.getAsJsonObject("tracks").get("list_count").getAsInt();i++){
                 String name = jsonData.getAsJsonObject("tracks").getAsJsonArray("items").get(i).getAsJsonObject().get("name").getAsString();
                 String id = jsonData.getAsJsonObject("tracks").getAsJsonArray("items").get(i).getAsJsonObject().get("id").toString();
+                String image = jsonData.getAsJsonObject("tracks").getAsJsonArray("items").get(i).getAsJsonObject().getAsJsonArray("images").get(0).getAsJsonObject().get("url").toString();
 
                 list.add(
                         new results_artist(
                                 name,
                                 id,
-                                id)
+                                id,
+                                image
+                                )
                 );
 
             }
