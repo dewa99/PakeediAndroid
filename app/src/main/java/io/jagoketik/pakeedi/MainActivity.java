@@ -25,6 +25,7 @@ import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
             audioPlay();
         }
         else {
+
             player.stop();
             player.reset();
             audioPlay();
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
             player.prepare();
             artistPan.setText(artist);
             songTitle.setText(title);
-            image_list.setImageBitmap(loadimage(img_url));
+            Picasso.get().load(img_url).into(image_list);
             player.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -185,15 +187,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public Bitmap loadimage(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Bitmap d = BitmapFactory.decodeStream(is);
-            return Bitmap.createScaledBitmap(d,640, 640 , false);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+
 
     void pause(){
 
