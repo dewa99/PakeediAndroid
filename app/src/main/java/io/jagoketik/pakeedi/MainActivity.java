@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView titles,artistPan,songTitle;
     Button play,prev,next;
     MediaPlayer player;
-    String jsonData;
+    JsonObject jsonData;
     String url,url1;
     String artist,title,img_url;
     ImageView image_list;
@@ -133,23 +133,23 @@ public class MainActivity extends AppCompatActivity {
     void parseJson(){
 
         try {
-            jsonData = new GetJson().AsString(url);
-            JsonObject reader = new JsonParser().parse(jsonData).getAsJsonObject();
-            artist = reader.get("msinger").getAsString();
-            title = reader.get("msong").getAsString();
-            if (reader.get("imgSrc").getAsString() != null){
-                img_url = reader.get("imgSrc").getAsString();
+            jsonData = new GetJson().AsJSONObject(url);
+
+            artist = jsonData.get("msinger").getAsString();
+            title = jsonData.get("msong").getAsString();
+            if (jsonData.get("imgSrc").getAsString() != null){
+                img_url = jsonData.get("imgSrc").getAsString();
             }else{
-                img_url = reader.get("album_url").getAsString();
+                img_url = jsonData.get("album_url").getAsString();
             }
-            if(reader.get("r320Url").getAsString()!=null){
-                url1 = reader.get("r320Url").getAsString();
+            if(jsonData.get("r320Url").getAsString()!=null){
+                url1 = jsonData.get("r320Url").getAsString();
             }
-            else if(reader.get("r192Url").getAsString()!=null){
-                url1 = reader.get("r192Url").getAsString();
+            else if(jsonData.get("r192Url").getAsString()!=null){
+                url1 = jsonData.get("r192Url").getAsString();
             }
-            else if(reader.get("mp3Url").getAsString()!=null){
-                url1 = reader.get("mp3Url").getAsString();
+            else if(jsonData.get("mp3Url").getAsString()!=null){
+                url1 = jsonData.get("mp3Url").getAsString();
             }
 
         } catch (ExecutionException e) {

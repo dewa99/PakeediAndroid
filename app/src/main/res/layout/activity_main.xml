@@ -8,6 +8,7 @@
     tools:context=".MainActivity"
     android:background="@android:color/white">
 
+
     <RelativeLayout
         android:id="@+id/containermain"
         android:layout_width="match_parent"
@@ -23,7 +24,6 @@
         </FrameLayout>
 
     </RelativeLayout>
-
 
     <TextView
         android:id="@+id/textView"

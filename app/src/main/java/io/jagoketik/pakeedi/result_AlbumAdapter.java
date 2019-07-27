@@ -40,7 +40,7 @@ public class result_AlbumAdapter extends RecyclerView.Adapter<result_AlbumAdapte
         result_album iniAlbum = album.get(i);
         result_albumAdapterViewHolder.name.setText(iniAlbum.getTitle());
         Picasso.get()
-                .load(iniAlbum.getImgSrc().replace("\"",""))
+                .load(iniAlbum.getImgSrc())
                 .placeholder(R.drawable.music_placeholder)
                 .error(R.drawable.music_placeholder)
                 .into((ImageView) result_albumAdapterViewHolder.a.findViewById(R.id.imageResult));

@@ -9,11 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +52,12 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
         final results Result = result.get(position);
         resultViewHolder.name.setText(Result.getTitle());
         Picasso.get()
-                .load(Result.getUrlimage().replace("\"",""))
+                .load(Result.getUrlimage())
                 .placeholder(R.drawable.music_placeholder)
                 .error(R.drawable.music_placeholder)
                 .into((ImageView) resultViewHolder.a.findViewById(R.id.imageResult));
-        resultViewHolder.name.setOnClickListener(new View.OnClickListener() {
+
+        resultViewHolder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -65,7 +68,6 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
                 frag.setArguments(bundle);
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.result2, frag).commit();
                 Toast.makeText(activity, ""+Result.getUrlimage(), Toast.LENGTH_SHORT).show();
-
 
             }
         });
@@ -81,10 +83,12 @@ public class resultAdapter extends RecyclerView.Adapter<resultAdapter.resultView
         TextView name;
         ImageView imageprof;
         View a;
+        CardView card;
         public resultViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.nameResult);
             imageprof = (ImageView) itemView.findViewById(R.id.imageResult);
+            card = (CardView) itemView.findViewById(R.id.songslist);
             a = itemView;
 
         }

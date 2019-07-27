@@ -41,10 +41,10 @@ public class search extends Fragment {
                     value = form.getText().toString();
                     String key = value.replaceAll("\\s","");
                     json = "http://165.22.97.31/music/v2/search/" + key;
-
                     result resultFrag = new result();
                     Bundle bundle = new Bundle();
                     bundle.putString("json",json);
+                    bundle.putString("key",key);
                     resultFrag.setArguments(bundle);
                     FragmentManager manager = getFragmentManager();
                     manager.beginTransaction()

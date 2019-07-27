@@ -1,7 +1,9 @@
 package io.jagoketik.pakeedi;
 
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dezlum.codelabs.getjson.GetJson;
@@ -31,6 +34,7 @@ public class result extends Fragment {
     JsonObject jsonData;
     String json;
     ImageView profpic;
+    TextView songs,artist,tulisanalbum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +42,42 @@ public class result extends Fragment {
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_result, container, false);
+        tulisanalbum = v.findViewById(R.id.tulisanAlbum);
+        songs = v.findViewById(R.id.songsbutton);
+        songs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = getArguments();
+                if(bundle !=null){
+                    json = bundle.getString("key");
+                    bundle.putString("key",json);
+                    hasil_lagu hasil = new hasil_lagu();
+                    hasil.setArguments(bundle);
+                    FragmentManager manager = getFragmentManager();
+                    manager.beginTransaction()
+                            .replace(R.id.result2, hasil)
+                            .commit();
+                songs.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                artist.setBackgroundResource(0);
+                tulisanalbum.setText("Songs");
+                }
+            }
+        });
+        artist = v.findViewById(R.id.artistalbum);
+        artist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             Fragment frag = getFragmentManager().findFragmentById(R.id.result2);
+                 getFragmentManager().beginTransaction()
+                         .remove(frag)
+                         .commit();
+
+             songs.setBackgroundResource(0);
+             artist.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+             tulisanalbum.setText("Albums");
+            }
+        });
+
 
         EditText value = v.findViewById(R.id.search);
         profpic = (ImageView) v.findViewById(R.id.imageResult);

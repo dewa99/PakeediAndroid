@@ -3,25 +3,27 @@ package io.jagoketik.model;
 import java.util.ArrayList;
 
 public class songs {
-    private int id;
-    private String title;
-    ArrayList<Object> songs = new ArrayList<>();
 
-    public songs(int id, String title) {
-        this.id = id;
-        this.title = title;
-        this.songs = songs;
+    private String title;
+    private String artist;
+    private String url;
+
+    public String getUrl() {
+        return url;
     }
 
-    public int getId() {
-        return id;
+    public songs(String title, String artist, String url) {
+        this.title = title;
+        this.artist = artist;
+        this.url = url;
+    }
+
+    public String getArtist() {
+        return artist;
     }
 
     public String getTitle() {
         return title;
     }
-
-    public ArrayList<Object> getSongs() {
-        return songs;
-    }
 }
+
