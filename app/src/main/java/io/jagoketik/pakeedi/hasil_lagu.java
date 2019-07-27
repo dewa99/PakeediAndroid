@@ -57,7 +57,7 @@ JsonObject jsonData;
             for (int i = 0;i<jsonData.getAsJsonArray("itemlist").size();i++){
                 String title = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("info1").getAsString();
                 String artist = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("info2").getAsString();
-                String url = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("m_url").toString();
+                String url = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("m_url").getAsString();
 
                 songs.add(
                         new songs(

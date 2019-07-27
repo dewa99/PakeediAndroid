@@ -43,6 +43,9 @@ public class result_SongsAdapter extends RecyclerView.Adapter<result_SongsAdapte
             public void onClick(View v) {
 //               33333
                 Toast.makeText(mcx, ""+Songs.getUrl(), Toast.LENGTH_SHORT).show();
+                if(mcx instanceof MainActivity){
+                    ((MainActivity)mcx).play(Songs.getUrl());
+                }
             }
         });
 

@@ -4,11 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
@@ -39,6 +41,7 @@ public class hasil_album extends Fragment {
         LinearLayoutManager layoutManager = new org.solovyev.android.views.llm.LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
         list = new ArrayList<>();
+
 
         Bundle bundle = getArguments();
         if(bundle !=null){

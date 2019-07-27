@@ -124,4 +124,8 @@ public class result extends Fragment {
         recyclerView.setAdapter(adapter);
         return v;
     }
+    void changecolorArtist(){
+        artist.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        songs.setBackgroundResource(0);
+    }
 }

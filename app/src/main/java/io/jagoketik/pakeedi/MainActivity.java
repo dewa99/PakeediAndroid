@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     void play(String url){
         this.url = url;
+        if(player!=null)
         Controller();
     }
     void parseJson(){
