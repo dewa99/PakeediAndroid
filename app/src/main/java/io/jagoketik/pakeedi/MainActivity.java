@@ -98,7 +98,14 @@ public class MainActivity extends AppCompatActivity {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(player.isPlaying()){
+                    player.pause();
+                    play.setBackground(getResources().getDrawable(R.drawable.ic_play));
+                }
+                else{
+                    player.seekTo(player.getCurrentPosition());
+                    player.start();
+                }
             }
         });
         prev.setOnClickListener(new View.OnClickListener() {
@@ -121,14 +128,21 @@ public class MainActivity extends AppCompatActivity {
 
         player = new MediaPlayer();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        if(!player.isPlaying()){
-            player.reset();
-        }
+
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                player.stop();
+                player.reset();
+                play.setBackground(getResources().getDrawable(R.drawable.ic_play));
+            }
+        });
 
     }
 
     void play(String url){
         this.url = url;
+        play.setBackground(getResources().getDrawable(R.drawable.ic_pause));
         if(player!=null)
         Controller();
     }

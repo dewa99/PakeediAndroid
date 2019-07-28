@@ -69,9 +69,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        android:background="#565d69"
+        android:background="@android:color/white"
         >
         <TextView
             android:id="@+id/artistPanel"
@@ -96,34 +96,40 @@
             android:id="@+id/img_list"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_launcher_background"/>
+            android:src="@drawable/music_placeholder"/>
 
         <LinearLayout
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
+                android:layout_marginHorizontal="10dp"
                 android:id="@+id/prev"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@android:drawable/ic_media_previous" />
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_prev"
+                android:layout_gravity="center_vertical"/>
 
             <Button
                 android:id="@+id/play"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@android:drawable/ic_media_play" />
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_play"
+                android:layout_gravity="center_vertical"/>
 
             <Button
+                android:layout_marginHorizontal="10dp"
                 android:id="@+id/next"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@android:drawable/ic_media_next" />
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_next"
+                android:layout_gravity="center_vertical"/>
 
 
         </LinearLayout>
@@ -133,7 +139,7 @@
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="@drawable/layout_bottomnav"
