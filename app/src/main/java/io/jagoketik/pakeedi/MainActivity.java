@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     player.seekTo(player.getCurrentPosition());
                     player.start();
+                    play.setBackground(getResources().getDrawable(R.drawable.ic_pause));
                 }
             }
         });
