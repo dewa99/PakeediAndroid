@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     Button play,prev,next;
     MediaPlayer player;
     JsonObject jsonData;
-    String url,url1;
+    String url,url1,quality;
     String artist,title,img_url;
     ImageView image_list;
 
@@ -142,10 +142,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void play(String url){
+        Boolean isPaused = !player.isPlaying() && player.getCurrentPosition() > 1;
+        if(isPaused){
+            player.reset();
+        }
         this.url = url;
         play.setBackground(getResources().getDrawable(R.drawable.ic_pause));
         if(player!=null)
-        Controller();
+            Controller();
     }
     void parseJson(){
 
@@ -159,14 +163,18 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 img_url = jsonData.get("album_url").getAsString();
             }
-            if(jsonData.get("r320Url").getAsString()!=null){
+
+            if(jsonData.get("r320Url").getAsString()!= null){
                 url1 = jsonData.get("r320Url").getAsString();
+                quality = "320";
             }
             else if(jsonData.get("r192Url").getAsString()!=null){
                 url1 = jsonData.get("r192Url").getAsString();
+                quality = "190";
             }
             else if(jsonData.get("mp3Url").getAsString()!=null){
                 url1 = jsonData.get("mp3Url").getAsString();
+                quality = "mp3";
             }
 
         } catch (ExecutionException e) {
@@ -177,11 +185,11 @@ public class MainActivity extends AppCompatActivity {
     }
     void Controller(){
         parseJson();
+
         if(!player.isPlaying()){
             audioPlay();
         }
         else {
-
             player.stop();
             player.reset();
             audioPlay();
@@ -196,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
             songTitle.setText(title);
             Picasso.get().load(img_url).into(image_list);
             player.start();
+            Toast.makeText(getBaseContext(), "quality : " + quality , Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

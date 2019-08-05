@@ -60,7 +60,7 @@ public class hasil_album extends Fragment {
             for (int i=0;i<jsonData.getAsJsonObject("albums").get("list_count").getAsInt();i++){
                 String name = jsonData.getAsJsonObject("albums").get("items").getAsJsonArray().get(i).getAsJsonObject().get("name").getAsString();
                 String id = jsonData.getAsJsonObject("albums").get("items").getAsJsonArray().get(i).getAsJsonObject().get("id").getAsString();
-                String picUrl = jsonData.getAsJsonObject("albums").get("items").getAsJsonArray().get(i).getAsJsonObject().get("images").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString();
+                String picUrl = jsonData.getAsJsonObject("albums").get("items").getAsJsonArray().get(i).getAsJsonObject().get("images").getAsJsonArray().get(2).getAsJsonObject().get("url").getAsString();
 
                 list.add(
                         new result_album(
