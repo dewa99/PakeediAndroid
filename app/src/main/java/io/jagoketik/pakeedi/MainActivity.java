@@ -142,10 +142,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void play(String url){
-        Boolean isPaused = !player.isPlaying() && player.getCurrentPosition() > 1;
-        if(isPaused){
-            player.reset();
-        }
+        player.reset();
         this.url = url;
         play.setBackground(getResources().getDrawable(R.drawable.ic_pause));
         if(player!=null)

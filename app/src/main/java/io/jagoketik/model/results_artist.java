@@ -22,4 +22,5 @@ public class results_artist {
     public String getId() {
         return id;
     }
+
 }

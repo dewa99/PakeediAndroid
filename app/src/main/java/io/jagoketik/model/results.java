@@ -16,7 +16,7 @@ public class results {
     }
 
     public String getUrlimage() {
-        return urlimage;
+        return urlimage.replace("%d" , "100");
     }
 
     public String getId() {
