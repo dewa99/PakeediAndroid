@@ -63,6 +63,7 @@ JsonObject jsonData;
                         new songs(
                                 title,
                                 artist,
+                                url,
                                 url
                         )
                 );

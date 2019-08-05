@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dezlum.codelabs.getjson.GetJson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import io.jagoketik.model.songs;
 public class browse extends Fragment {
 RecyclerView recyclerView;
 List<io.jagoketik.model.songs> songs;
-result_SongsAdapter adapter;
+result_BrowseAdapter adapter;
 JsonObject jsonData;
 
     @Override
@@ -38,27 +39,31 @@ JsonObject jsonData;
         songs = new ArrayList<>();
 
         try {
-            jsonData = new GetJson().AsJSONObject("http://165.22.97.31/music/search/badguy");
+            jsonData = new GetJson().AsJSONObject("http://165.22.97.31/music/top/lagu/33");
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0;i<jsonData.getAsJsonArray("itemlist").size();i++){
-            String title = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("info1").getAsString();
-            String artist = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("info2").getAsString();
-            String url = jsonData.getAsJsonArray("itemlist").get(i).getAsJsonObject().get("m_url").getAsString();
+        JsonArray lagu = jsonData.getAsJsonObject("tracks").getAsJsonArray("items");
+
+        for (int i = 0;i<lagu.size();i++){
+            String title = lagu.get(i).getAsJsonObject().get("name").getAsString();
+            String artist = lagu.get(i).getAsJsonObject().getAsJsonArray("artist_list").get(0).getAsJsonObject().get("name").getAsString();
+            String url = "http://165.22.97.31/music/songinfo/" + lagu.get(i).getAsJsonObject().get("id").getAsString();
+            String image = lagu.get(i).getAsJsonObject().getAsJsonArray("images").get(2).getAsJsonObject().get("url").getAsString();
 
             songs.add(
                     new songs(
                             title,
                             artist,
-                            url
+                            url,
+                            image
                     )
             );
         }
-        adapter = new result_SongsAdapter(getContext(),songs);
+        adapter = new result_BrowseAdapter(getContext(),songs);
        recyclerView.setAdapter(adapter);
         return v;
     }

@@ -7,11 +7,13 @@ public class songs {
     private String title;
     private String artist;
     private String url;
+    private String image;
 
-    public songs(String title, String artist, String url) {
+    public songs(String title, String artist, String url, String image) {
         this.title = title;
         this.artist = artist;
         this.url = url;
+        this.image = image;
     }
 
     public String getTitle() {
@@ -26,6 +28,8 @@ public class songs {
         return url;
     }
 
-
+    public String getImage() {
+        return image.replace("%d" , "100");
+    }
 }
 
