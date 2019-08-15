@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             x = "mp3";
                         }
-                        final Toast toast = Toast.makeText(getBaseContext(),"report : " + x + " mbps" , Toast.LENGTH_LONG);
+                        final Toast toast = Toast.makeText(getBaseContext(),"Kualitas Musik : " + x , Toast.LENGTH_LONG);
                         toast.show();
                     }
                 });
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             player.setDataSource(url1);
             player.prepare();
             artistPan.setText(artist);
-            songTitle.setText(title.length() > 25 ? title.substring(0,25) : title);
+            songTitle.setText(title);
             if(!img_url.isEmpty())
                 Picasso.get().load(img_url).into(image_list);
             player.start();
