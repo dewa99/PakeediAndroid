@@ -1,4 +1,6 @@
 package io.jagoketik.pakeedi;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,9 +41,11 @@ public class MainActivity extends AppCompatActivity {
     String artist,title,img_url;
     ImageView image_list;
     SeekBar seek_bar;
+    RelativeLayout panel;
     private Handler mHandler = new Handler();
     SpeedTestSocket speedTestSocket;
     BigDecimal Kecepatan;
+    Boolean PanelShow = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         songTitle = findViewById(R.id.songTitle);
         image_list = findViewById(R.id.img_list);
         seek_bar = findViewById(R.id.seekBar);
+        panel = findViewById(R.id.panel);
 
         speedTestSocket = new SpeedTestSocket();
 
@@ -176,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 player.stop();
                 player.reset();
                 play.setBackground(getResources().getDrawable(R.drawable.ic_play));
+                hide();
             }
         });
 
@@ -237,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     void audioPlay(){
+        if(PanelShow)
+            hide();
         try {
             player.setDataSource(url1);
             player.prepare();
@@ -246,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 Picasso.get().load(img_url).into(image_list);
             player.start();
             seek_bar.setMax(player.getDuration() / 1000);
-
+            show();
             //Make sure you update Seekbar on UI thread
             MainActivity.this.runOnUiThread(new Runnable() {
                 @Override
@@ -285,6 +294,51 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    void show(){
+        PanelShow = true;
+        seek_bar.setVisibility(View.VISIBLE);
+        panel.setVisibility(View.VISIBLE);
+        seek_bar.setAlpha(0.0f);
+        panel.setAlpha(0.0f);
+
+        panel.animate()
+                .translationY(panel.getBaseline())
+                .setDuration(400)
+                .alpha(1.0f)
+                .setListener(null);
+
+        seek_bar.animate()
+                .translationY(seek_bar.getBaseline())
+                .setDuration(400)
+                .alpha(1.0f)
+                .setListener(null);
+    }
+
+    void hide(){
+        PanelShow = false;
+        seek_bar.animate()
+                .translationY(0)
+                .setDuration(400)
+                .alpha(0.0f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        seek_bar.setVisibility(View.GONE);
+                    }
+                });
+        panel.animate()
+                .translationY(0)
+                .setDuration(400)
+                .alpha(0.0f)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        panel.setVisibility(View.GONE);
+                    }
+                });
+    }
 
     void pause(){
 
