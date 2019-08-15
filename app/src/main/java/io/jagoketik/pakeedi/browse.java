@@ -64,7 +64,7 @@ JsonObject jsonData;
             );
         }
         adapter = new result_BrowseAdapter(getContext(),songs);
-       recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
         return v;
     }
 

@@ -1,39 +1,32 @@
 package io.jagoketik.pakeedi;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.squareup.picasso.Picasso;
 
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
+import fr.bmartel.speedtest.SpeedTestReport;
+import fr.bmartel.speedtest.SpeedTestSocket;
+import fr.bmartel.speedtest.inter.ISpeedTestListener;
+import fr.bmartel.speedtest.model.SpeedTestError;
 import io.jagoketik.model.songs;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     String url,url1,quality;
     String artist,title,img_url;
     ImageView image_list;
+    SeekBar seek_bar;
+    private Handler mHandler = new Handler();
+    SpeedTestSocket speedTestSocket;
+    BigDecimal Kecepatan;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +93,47 @@ public class MainActivity extends AppCompatActivity {
         artistPan = findViewById(R.id.artistPanel);
         songTitle = findViewById(R.id.songTitle);
         image_list = findViewById(R.id.img_list);
+        seek_bar = findViewById(R.id.seekBar);
+
+        speedTestSocket = new SpeedTestSocket();
+
+        speedTestSocket.addSpeedTestListener(new ISpeedTestListener() {
+
+            @Override
+            public void onCompletion(SpeedTestReport report) {
+                Kecepatan = report.getTransferRateBit();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Double a = Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue();
+                        String x = "";
+                        if(a > 1.5){
+                            x = "320";
+                        }else if(a > 0.6){
+                            x = "192";
+                        }else{
+                            x = "mp3";
+                        }
+                        final Toast toast = Toast.makeText(getBaseContext(),"report : " + x + " mbps" , Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+//                System.out.println("[COMPLETED] rate in octet/s : " + report.getTransferRateOctet());
+//                System.out.println("[COMPLETED] rate in bit/s   : " + report.getTransferRateBit());
+            }
+
+            @Override
+            public void onError(SpeedTestError speedTestError, String errorMessage) {
+                // called when a download/upload error occur
+            }
+
+            @Override
+            public void onProgress(float percent, SpeedTestReport report) {
+                Kecepatan = report.getTransferRateBit();
+            }
+        });
+
+        speedTestSocket.startDownload("ftp://speedtest.tele2.net/1MB.zip");
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,15 +201,18 @@ public class MainActivity extends AppCompatActivity {
                 img_url = jsonData.get("album_url").getAsString();
             }
 
-            if(jsonData.get("r320Url").getAsString()!= null){
+//            if(jsonData.get("r320Url").getAsString()!= null){
+            if(Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue() > 1.5){
                 url1 = jsonData.get("r320Url").getAsString();
                 quality = "320";
             }
-            else if(jsonData.get("r192Url").getAsString()!=null){
+//            else if(jsonData.get("r192Url").getAsString()!=null){
+            else if(Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue() > 0.6){
                 url1 = jsonData.get("r192Url").getAsString();
-                quality = "190";
+                quality = "192";
             }
-            else if(jsonData.get("mp3Url").getAsString()!=null){
+//            else if(jsonData.get("mp3Url").getAsString()!=null){
+            else {
                 url1 = jsonData.get("mp3Url").getAsString();
                 quality = "mp3";
             }
@@ -198,16 +241,49 @@ public class MainActivity extends AppCompatActivity {
             player.setDataSource(url1);
             player.prepare();
             artistPan.setText(artist);
-            songTitle.setText(title);
-            Picasso.get().load(img_url).into(image_list);
+            songTitle.setText(title.length() > 25 ? title.substring(0,25) : title);
+            if(!img_url.isEmpty())
+                Picasso.get().load(img_url).into(image_list);
             player.start();
+            seek_bar.setMax(player.getDuration() / 1000);
+
+            //Make sure you update Seekbar on UI thread
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(player != null){
+                        int mCurrentPosition = player.getCurrentPosition() / 1000;
+                        seek_bar.setProgress(mCurrentPosition);
+                    }
+                    mHandler.postDelayed(this, 1000);
+                }
+            });
+
+            seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if(player != null && fromUser){
+                        player.seekTo(progress * 1000);
+                    }
+                }
+            });
+
             Toast.makeText(getBaseContext(), "quality : " + quality , Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 
 
     void pause(){

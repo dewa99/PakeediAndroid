@@ -39,7 +39,8 @@ public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdap
         final songs Songs = songs.get(i);
         result_songsViewHolder.title.setText(Songs.getTitle());
         result_songsViewHolder.artist.setText(Songs.getArtist());
-        Picasso.get().load(Songs.getImage().replace("\"","")).into((ImageView) result_songsViewHolder.a.findViewById(R.id.gambarlagu));
+        if(!Songs.getImage().replace("\"","").isEmpty())
+            Picasso.get().load(Songs.getImage().replace("\"","")).into((ImageView) result_songsViewHolder.a.findViewById(R.id.gambarlagu));
         result_songsViewHolder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

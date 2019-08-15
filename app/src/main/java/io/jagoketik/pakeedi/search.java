@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dezlum.codelabs.getjson.GetJson;
 import com.google.gson.JsonObject;
@@ -39,8 +40,9 @@ public class search extends Fragment {
             @Override
             public void onClick(View v) {
                     value = form.getText().toString();
-                    String key = value.replaceAll("\\s","");
+                    String key = value.replaceAll("\\s","%20");
                     json = "http://165.22.97.31/music/v2/search/" + key;
+                    Toast.makeText(getActivity(), "url : " + json , Toast.LENGTH_SHORT).show();
                     result resultFrag = new result();
                     Bundle bundle = new Bundle();
                     bundle.putString("json",json);
