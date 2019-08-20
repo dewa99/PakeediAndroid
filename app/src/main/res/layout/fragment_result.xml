@@ -10,7 +10,6 @@
     android:id="@+id/resultcontainer"
     >
 
-
     <LinearLayout
         android:id="@+id/resul2"
         android:layout_width="match_parent"
@@ -79,6 +78,7 @@
            android:id="@+id/result2"
            android:layout_width="match_parent"
            android:layout_height="wrap_content">
+
        </RelativeLayout>
 
 

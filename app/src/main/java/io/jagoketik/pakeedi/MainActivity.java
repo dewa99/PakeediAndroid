@@ -30,6 +30,7 @@ import fr.bmartel.speedtest.SpeedTestReport;
 import fr.bmartel.speedtest.SpeedTestSocket;
 import fr.bmartel.speedtest.inter.ISpeedTestListener;
 import fr.bmartel.speedtest.model.SpeedTestError;
+import io.jagoketik.helper.DataHelper;
 import io.jagoketik.model.songs;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     SpeedTestSocket speedTestSocket;
     BigDecimal Kecepatan;
     Boolean PanelShow = false;
+    DataHelper dbcenter;
+    public static MainActivity ma;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -100,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
         image_list = findViewById(R.id.img_list);
         seek_bar = findViewById(R.id.seekBar);
         panel = findViewById(R.id.panel);
+        ma = this;
+        dbcenter = new DataHelper(this);
 
         speedTestSocket = new SpeedTestSocket();
 
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        speedTestSocket.startDownload("ftp://speedtest.tele2.net/1MB.zip");
+        speedTestSocket.startFixedDownload("ftp://speedtest.tele2.net/1MB.zip",10);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,12 +214,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
 //            if(jsonData.get("r320Url").getAsString()!= null){
-            if(Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue() > 1.5){
+            if(Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue() > 1.5 && !jsonData.get("r320Url").getAsString().equals("") ){
                 url1 = jsonData.get("r320Url").getAsString();
                 quality = "320";
             }
 //            else if(jsonData.get("r192Url").getAsString()!=null){
-            else if(Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue() > 0.6){
+            else if(Kecepatan.divide(BigDecimal.valueOf(1000000.0),BigDecimal.ROUND_UP).doubleValue() > 0.6 && !jsonData.get("r192Url").getAsString().equals("")){
                 url1 = jsonData.get("r192Url").getAsString();
                 quality = "192";
             }
@@ -288,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            Toast.makeText(getBaseContext(), "quality : " + quality , Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Kualitas Pemutaran : " + quality , Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

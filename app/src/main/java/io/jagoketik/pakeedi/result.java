@@ -34,7 +34,7 @@ public class result extends Fragment {
     JsonObject jsonData;
     String json;
     ImageView profpic;
-    TextView songs,artist,tulisanalbum;
+    TextView songs, artist, tulisanalbum;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,33 +48,34 @@ public class result extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = getArguments();
-                if(bundle !=null){
+                if (bundle != null) {
                     json = bundle.getString("key");
-                    bundle.putString("key",json);
+                    bundle.putString("key", json);
                     hasil_lagu hasil = new hasil_lagu();
                     hasil.setArguments(bundle);
                     FragmentManager manager = getFragmentManager();
                     manager.beginTransaction()
                             .replace(R.id.result2, hasil)
                             .commit();
-                songs.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                artist.setBackgroundResource(0);
-                tulisanalbum.setText("Songs");
+                    songs.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    artist.setBackgroundResource(0);
+                    tulisanalbum.setText("Songs");
                 }
             }
         });
+
         artist = v.findViewById(R.id.artistalbum);
         artist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             Fragment frag = getFragmentManager().findFragmentById(R.id.result2);
-                 getFragmentManager().beginTransaction()
-                         .remove(frag)
-                         .commit();
+                Fragment frag = getFragmentManager().findFragmentById(R.id.result2);
+                getFragmentManager().beginTransaction()
+                        .remove(frag)
+                        .commit();
 
-             songs.setBackgroundResource(0);
-             artist.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-             tulisanalbum.setText("Albums");
+                songs.setBackgroundResource(0);
+                artist.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                tulisanalbum.setText("Albums");
             }
         });
 
@@ -86,10 +87,10 @@ public class result extends Fragment {
 
         recyclerView = v.findViewById(R.id.resultsArtist);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         Bundle bundle = getArguments();
-        if(bundle !=null){
+        if (bundle != null) {
             json = bundle.getString("json");
             try {
                 jsonData = new GetJson().AsJSONObject(json);
@@ -101,30 +102,30 @@ public class result extends Fragment {
 //            String result = jsonData.getAsJsonArray("album_list").get(0).getAsJsonObject().get("artist_name").toString();
         }
 
-        if(jsonData.getAsJsonArray("singer_list") != null){
-            for (int i = 0;i < jsonData.getAsJsonArray("singer_list").size();i++){
+        if (jsonData.getAsJsonArray("singer_list") != null) {
+            for (int i = 0; i < jsonData.getAsJsonArray("singer_list").size(); i++) {
                 String result = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("name").toString();
-                String resultFix = result.replace("\"","");
+                String resultFix = result.replace("\"", "");
                 String urlImage = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("pic_url_tpl").getAsString();
                 String id = jsonData.getAsJsonArray("singer_list").get(i).getAsJsonObject().get("doc_id").toString();
 
                 resultList.add(
-                   new results(
-                           resultFix,
-                           urlImage,
-                           id)
-           );
+                        new results(
+                                resultFix,
+                                urlImage,
+                                id)
+                );
             }
-        }
-        else {
+        } else {
             Toast.makeText(getContext(), "Tidak Ada Data Artist", Toast.LENGTH_SHORT).show();
         }
 
-        adapter = new resultAdapter(getContext(),resultList);
+        adapter = new resultAdapter(getContext(), resultList);
         recyclerView.setAdapter(adapter);
         return v;
     }
-    void changecolorArtist(){
+
+    void changecolorArtist() {
         artist.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         songs.setBackgroundResource(0);
     }

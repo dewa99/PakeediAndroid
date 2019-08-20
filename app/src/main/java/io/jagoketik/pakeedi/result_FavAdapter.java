@@ -2,7 +2,6 @@ package io.jagoketik.pakeedi;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -21,12 +20,12 @@ import java.util.List;
 import io.jagoketik.helper.DataHelper;
 import io.jagoketik.model.songs;
 
-public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdapter.result_SongsViewHolder> {
+public class result_FavAdapter extends RecyclerView.Adapter<result_FavAdapter.result_SongsViewHolder> {
     private Context mcx;
     private List<io.jagoketik.model.songs> songs;
     private DataHelper dbHelper;
 
-    public result_BrowseAdapter(Context mcx, List<io.jagoketik.model.songs> songs) {
+    public result_FavAdapter(Context mcx, List<io.jagoketik.model.songs> songs) {
         this.mcx = mcx;
         this.songs = songs;
     }
@@ -44,8 +43,9 @@ public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdap
         final songs Songs = songs.get(i);
         result_songsViewHolder.title.setText(Songs.getTitle());
         result_songsViewHolder.artist.setText(Songs.getArtist());
-        if(!Songs.getImage().replace("\"","").isEmpty())
-            Picasso.get().load(Songs.getImage().replace("\"","")).into((ImageView) result_songsViewHolder.a.findViewById(R.id.gambarlagu));
+//        if(!Songs.getImage().replace("\"","").isEmpty())
+//            Picasso.get().load(Songs.getImage().replace("\"","")).into((ImageView) result_songsViewHolder.a.findViewById(R.id.gambarlagu));
+        result_songsViewHolder.btnadd.setVisibility(View.GONE);
         result_songsViewHolder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,21 +53,6 @@ public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdap
                 if(mcx instanceof MainActivity){
                     ((MainActivity)mcx).play(Songs.getUrl());
                 }
-            }
-        });
-
-        result_songsViewHolder.btnadd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(mcx, ""+Songs.getArtist() + " , " + Songs.getTitle() + " " + Songs.getUrl() , Toast.LENGTH_SHORT).show();
-                dbHelper = new DataHelper(mcx);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                SQLiteStatement stmt = db.compileStatement("insert into playlist(singer, title, url) values( ? , ? , ?)");
-                stmt.bindString(1, Songs.getArtist());
-                stmt.bindString(2, Songs.getTitle());
-                stmt.bindString(3, Songs.getUrl());
-                stmt.execute();
-                Toast.makeText(mcx, "Berhasil tambah " + Songs.getArtist() + " - "+ Songs.getTitle() +" ke playlist", Toast.LENGTH_LONG).show();
             }
         });
 
