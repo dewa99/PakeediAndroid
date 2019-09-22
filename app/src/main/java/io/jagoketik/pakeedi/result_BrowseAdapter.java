@@ -44,8 +44,8 @@ public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdap
         final songs Songs = songs.get(i);
         result_songsViewHolder.title.setText(Songs.getTitle());
         result_songsViewHolder.artist.setText(Songs.getArtist());
-        if(!Songs.getImage().replace("\"","").isEmpty())
-            Picasso.get().load(Songs.getImage().replace("\"","")).into((ImageView) result_songsViewHolder.a.findViewById(R.id.gambarlagu));
+        result_songsViewHolder.btnDel.setVisibility(View.GONE);
+        if(!Songs.getImage().replace("\"","").isEmpty()) Picasso.get().load(Songs.getImage().replace("\"","")).into((ImageView) result_songsViewHolder.a.findViewById(R.id.gambarlagu));
         result_songsViewHolder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +82,7 @@ public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdap
         TextView artist,title;
         CardView card;
         TextView btnadd;
+        TextView btnDel;
         View a;
         public result_SongsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +90,7 @@ public class result_BrowseAdapter extends RecyclerView.Adapter<result_BrowseAdap
             title = itemView.findViewById(R.id.musicTitle);
             card = (CardView) itemView.findViewById(R.id.itemList);
             btnadd = (TextView) itemView.findViewById(R.id.addplay);
+            btnDel = (TextView) itemView.findViewById(R.id.deleteFav);
             a = itemView;
         }
     }

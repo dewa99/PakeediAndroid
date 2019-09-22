@@ -47,6 +47,14 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/deleteFav"
+            android:layout_width="22dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="12dp"
+            android:layout_height="20dp"
+            android:background="@android:drawable/presence_offline"/>
+
+        <TextView
             android:id="@+id/addplay"
             android:layout_width="22dp"
             android:layout_gravity="center"

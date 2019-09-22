@@ -2,7 +2,10 @@ package io.jagoketik.pakeedi;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,7 +42,7 @@ public class result_FavAdapter extends RecyclerView.Adapter<result_FavAdapter.re
     }
 
     @Override
-    public void onBindViewHolder(@NonNull result_SongsViewHolder result_songsViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final result_SongsViewHolder result_songsViewHolder, int i) {
         final songs Songs = songs.get(i);
         result_songsViewHolder.title.setText(Songs.getTitle());
         result_songsViewHolder.artist.setText(Songs.getArtist());
@@ -55,6 +58,22 @@ public class result_FavAdapter extends RecyclerView.Adapter<result_FavAdapter.re
                 }
             }
         });
+        result_songsViewHolder.btnDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper = new DataHelper(mcx);
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                SQLiteStatement stmt = db.compileStatement("delete from playlist where title=?" );
+                stmt.bindString(1, Songs.getArtist());
+                stmt.execute();
+
+                int newPosition = result_songsViewHolder.getAdapterPosition();
+                songs.remove(newPosition);
+                notifyItemRemoved(newPosition);
+                notifyItemChanged(newPosition,songs.size());
+            }
+        });
+
 
     }
 
@@ -67,6 +86,7 @@ public class result_FavAdapter extends RecyclerView.Adapter<result_FavAdapter.re
         TextView artist,title;
         CardView card;
         TextView btnadd;
+        TextView btnDel;
         View a;
         public result_SongsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +94,7 @@ public class result_FavAdapter extends RecyclerView.Adapter<result_FavAdapter.re
             title = itemView.findViewById(R.id.musicTitle);
             card = (CardView) itemView.findViewById(R.id.itemList);
             btnadd = (TextView) itemView.findViewById(R.id.addplay);
+            btnDel = (TextView) itemView.findViewById(R.id.deleteFav);
             a = itemView;
         }
     }
